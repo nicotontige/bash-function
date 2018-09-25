@@ -1,0 +1,25 @@
+# add fqdn in hosts file
+function hostadd
+{
+	if [ -z "$2" ]; then
+		IP="127.0.0.1"
+	else
+		IP="$2"
+	fi
+	echo "$IP $1" | sudo tee -a /etc/hosts
+}
+
+# delete fqdn in hosts file
+function hostdel
+{
+	sudo sed -i.bak "/$1/d" /etc/hosts
+}
+
+# dump into file and zip it
+function mysqldumpnow
+{
+        filename=$1_$(date +"%Y-%m-%d_%H-%M-%S")".sql"
+        mysqldump -u root -p $1 $2 > $filename
+        tar zcvf $filename.tar.gz $filename
+        rm -f $filename
+}
